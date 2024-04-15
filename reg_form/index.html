@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Player Registration Form</title>
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<h2>Player Registration Form</h2>
+<form action="#" method="post">
+  <label for="fullname">Full Name:</label><br>
+  <input type="text" id="fullname" name="fullname" required><br><br>
+
+  <label for="mobilenumber">Mobile Number: </label><br>
+  <input type="tel" id="mobilenumber" name="mobilenumber" required><br><br>
+
+  <label for="gender">Gender:</label><br>
+  <input type="radio" id="male" name="gender" value="male">
+  <label for="male">Male</label>
+  <input type="radio" id="female" name="gender" value="female">
+  <label for="female">Female</label><br><br>
+
+  <label for="parentname">Son/Daughter of:</label><br>
+  <input type="text" id="parentname" name="parentname" required><br><br>
+
+  <label for="mothertongue">Mother Tongue:</label><br>
+  <input type="text" id="mothertongue" name="mothertongue" required><br><br>
+
+  <label for="dob">Date of Birth:</label><br>
+  <input type="date" id="dob" name="dob" required><br><br>
+
+  <label for="telephonenumber">Whatsapp Number:</label><br>
+  <input type="tel" id="telephonenumber" name="telephonenumber"><br><br>
+
+  <label for="email">Email Address:</label><br>
+  <input type="email" id="email" name="email" required><br><br>
+
+  <label for="state">State in India:</label><br>
+<select id="state" name="state" required>
+  <option value="">Select State</option>
+  <option value="Andhra Pradesh">Andhra Pradesh</option>
+  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+  <option value="Assam">Assam</option>
+  <option value="Bihar">Bihar</option>
+  <option value="Chhattisgarh">Chhattisgarh</option>
+  <option value="Goa">Goa</option>
+  <option value="Gujarat">Gujarat</option>
+  <option value="Haryana">Haryana</option>
+  <option value="Himachal Pradesh">Himachal Pradesh</option>
+  <option value="Jharkhand">Jharkhand</option>
+  <option value="Karnataka">Karnataka</option>
+  <option value="Kerala">Kerala</option>
+  <option value="Madhya Pradesh">Madhya Pradesh</option>
+  <option value="Maharashtra">Maharashtra</option>
+  <option value="Manipur">Manipur</option>
+  <option value="Meghalaya">Meghalaya</option>
+  <option value="Mizoram">Mizoram</option>
+  <option value="Nagaland">Nagaland</option>
+  <option value="Odisha">Odisha</option>
+  <option value="Punjab">Punjab</option>
+  <option value="Rajasthan">Rajasthan</option>
+  <option value="Sikkim">Sikkim</option>
+  <option value="Tamil Nadu">Tamil Nadu</option>
+  <option value="Telangana">Telangana</option>
+  <option value="Tripura">Tripura</option>
+  <option value="Uttar Pradesh">Uttar Pradesh</option>
+  <option value="Uttarakhand">Uttarakhand</option>
+  <option value="West Bengal">West Bengal</option>
+</select><br><br>
+
+<label for="type">Type (player/arbiter/coach)?</label><br>
+<input type="radio" id="player" name="type" value="player" required>
+<label for="player">Player</label><br>
+<input type="radio" id="arbiter" name="type" value="arbiter">
+<label for="arbiter">Arbiter</label><br>
+<input type="radio" id="coach" name="type" value="coach">
+<label for="coach">Coach</label><br>
+
+<label for="photo">Please upload your passport size photo:</label><br>
+<input type="file" id="photo" name="photo" accept="image/*" required><br>
+
+<label for="aadhar_photo">Please upload your Aadhar card photo:</label><br>
+<input type="file" id="aadhar_photo" name="aadhar_photo" accept="image/*" required><br>
+
+<input type="submit" value="Submit">
+</form>
+</body>
+</html>
+ 
