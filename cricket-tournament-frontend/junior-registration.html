@@ -82,41 +82,64 @@
             document.getElementById("submitButton").value = "Processing Payment...";
             document.getElementById("submitButton").disabled = true;
 
-            const amount = 1; // Registration fee in INR
-            const currency = "INR";
-        
+            // Get form data for Google Sheets submission
+            const form = document.getElementById("registrationForm");
+            const formData = new FormData(form);
+            const object = {};
+
+            // Process form data including file uploads
+            for (const [key, value] of formData.entries()) {
+                if (value instanceof File && value.size > 0) {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(value);
+                    reader.onload = function () {
+                        object[key] = reader.result.split(',')[1];
+                    };
+                } else {
+                    object[key] = value;
+                }
+            }
+
+            // Get amount from form or set a fixed amount
+            const amount = 1; // Registration fee in INR (you can change this as needed)
+
             try {
-                let orderResponse = await fetch("http://localhost:5000/create-order", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ amount, currency })
+                // Get Razorpay key
+                const { data: { key } } = await axios.get("http://localhost:4000/api/getkey");
+                
+                // Create order
+                const { data: { order } } = await axios.post("http://localhost:4000/api/checkout", {
+                    amount: Number(amount)
                 });
 
-                let orderData = await orderResponse.json();
-
-                let options = {
-                    key: "rzp_live_sT372ba7IgeOTD", // Replace with your Razorpay Key
-                    amount: orderData.amount,
-                    currency: orderData.currency,
+                // Configure Razorpay options
+                const options = {
+                    key,
+                    amount: order.amount,
+                    currency: "INR",
                     name: "Cricket Tournament",
                     description: "Junior Registration Fee",
-                    order_id: orderData.id,
-                    handler: async function (response) {
-                        let verifyResponse = await fetch("http://localhost:5000/verify-payment", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify(response)
-                        });
-
-                        let verifyData = await verifyResponse.json();
-
-                        if (verifyData.success) {
-                            alert("Payment Successful! Proceeding with Registration...");
+                    image: "res/backdrop/logo.png",
+                    order_id: order.id,
+                    callback_url: "http://localhost:4000/api/paymentverification",
+                    handler: async function(response) {
+                        try {
+                            let sheetsResponse = await fetch("https://script.google.com/macros/s/AKfycbwTMUEHx0vyI0Vr5ocMrRyG65oIzmfFAq428aWz64OWGWwseQkeD6VZXQtKsxUPoWkkig/exec", {
+                                method: "POST",
+                                body: new URLSearchParams(object),
+                            });
+                
+                            let result = await sheetsResponse.text();
+                            alert("Payment successful and registration complete: " + result);
+                
                             document.getElementById("submitButton").value = "Submit";
-
-                            window.location.href = "index.html"; // Redirect to home page
-                        } else {
-                            alert("Payment Verification Failed");
+                            document.getElementById("submitButton").disabled = false;
+                            form.reset();
+                            window.location.href = "index.html";
+                        } catch (error) {
+                            alert("Payment successful but registration failed: " + error.message);
+                            document.getElementById("submitButton").value = "Submit";
+                            document.getElementById("submitButton").disabled = false;
                         }
                     },
                     prefill: {
@@ -124,19 +147,27 @@
                         email: document.getElementById("email").value,
                         contact: document.getElementById("mobilenumber").value
                     },
+                    notes: {
+                        "address": "Cricket Tournament Registration"
+                    },
                     theme: {
-                        color: "#3399cc"
+                        "color": "#121212"
                     }
                 };
-
-                let rzp = new Razorpay(options);
-                rzp.open();
-
+                
+                // Initialize and open Razorpay
+                const razor = new window.Razorpay(options);
+                razor.open();
+                
             } catch (error) {
                 alert("Error processing payment: " + error.message);
+                document.getElementById("submitButton").value = "Submit";
+                document.getElementById("submitButton").disabled = false;
             }
         });
     </script>
-
+    
+    <!-- Add Axios for API calls -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
 </html>
