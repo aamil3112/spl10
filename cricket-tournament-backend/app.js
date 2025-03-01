@@ -6,7 +6,13 @@ config({ path: "./config/config.env" });
 
 export const app = express();
 
-app.use(cors());
+// Configure CORS to allow requests from your frontend
+app.use(cors({
+  origin: 'http://localhost:5173', // Update this to match your Vite dev server port
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
